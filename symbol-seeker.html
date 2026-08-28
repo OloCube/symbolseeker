@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>§ymbol §eeker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap" rel="stylesheet">
+<style>
+:root{--bg-dark:#121214;--panel-bg:#1c1c1e;--accent-orange:#ff6b00;--text-light:#f4f4f5;--text-muted:#a1a1aa;--pack-1-green:#22c55e;--pack-2-yellow:#eab308;--pack-3-red:#ef4444}
+*{box-sizing:border-box} body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg-dark);color:var(--text-light);margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;user-select:none}
+.container{background:var(--panel-bg);padding:24px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.5);width:100%;max-width:420px;text-align:center;position:relative}
+.logo{font-size:2.2rem;font-weight:800;color:var(--accent-orange);margin-bottom:30px;letter-spacing:-1px}.menu-buttons{display:flex;flex-direction:column;gap:12px}
+.btn{background:#27272a;color:var(--text-light);border:2px solid transparent;padding:14px;font-size:1.1rem;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;transition:.15s}.btn:hover{border-color:var(--accent-orange);background:#3f3f46}.btn-primary{background:var(--accent-orange);color:white}.btn-primary:hover{background:#e05e00;border-color:transparent}.hidden{display:none!important}
+.carousel-container{position:relative;margin-bottom:20px}.pack-box{border-radius:12px;padding:20px;margin-bottom:15px;text-align:center}.pack-box.pack-1{border:3px solid var(--pack-1-green);background:rgba(34,197,94,.05)}.pack-box.pack-2{border:3px solid var(--pack-2-yellow);background:rgba(234,179,8,.05)}.pack-box.pack-3{border:3px solid var(--pack-3-red);background:rgba(239,68,68,.05)}
+.pack-title{font-size:1.3rem;font-weight:800;margin-bottom:15px}.level-grid-select{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.lvl-btn{background:#27272a;color:var(--text-light);border:none;padding:10px 0;font-weight:700;border-radius:6px;cursor:pointer}.lvl-btn.locked{opacity:.3;cursor:not-allowed}
+.carousel-controls{display:flex;justify-content:space-between;align-items:center}.stats{display:flex;justify-content:space-between;margin-bottom:15px;font-size:.9rem;color:var(--text-muted);font-weight:600}
+.scanner-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:15px;background:#121214;padding:6px;border-radius:8px}.tab{background:#27272a;color:var(--text-muted);border:none;padding:8px 0;font-weight:700;font-size:.85rem;border-radius:6px;cursor:pointer;font-family:inherit}.tab.active{background:var(--accent-orange);color:white}
+.game-grid{display:grid;gap:8px;margin:0 auto 20px}.grid-3x3{grid-template-columns:repeat(3,1fr);max-width:280px}.grid-4x3{grid-template-columns:repeat(3,1fr);max-width:280px}.grid-4x4{grid-template-columns:repeat(4,1fr);max-width:280px}.cell{aspect-ratio:1;background:#27272a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;color:white;font-weight:300;font-family:"Century Gothic",Futura,"Gill Sans",Arial,sans-serif}.cell.matched{background:#14532d;color:#4ade80;pointer-events:none}
+.modal{background:rgba(0,0,0,.88);position:absolute;inset:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;z-index:10}.modal h2{margin-top:0}.modal .btn{width:100%;margin-top:10px}
+.leaderboard-table{width:100%;border-collapse:collapse;margin-top:15px}.leaderboard-table th,.leaderboard-table td{padding:8px;text-align:left;border-bottom:1px solid #27272a}.credits-text{color:var(--text-muted);line-height:1.5}
+input{width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#27272a;color:white;font:inherit;margin:10px 0}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+
+<div id="main-menu">
+  <div class="logo">§ymbol §eeker</div>
+  <div class="menu-buttons">
+    <button class="btn btn-primary" onclick="changeScreen('level-select')">PLAY</button>
+    <button class="btn" onclick="startSpeedrun()">SPEEDRUN</button>
+    <button class="btn" onclick="showLeaderboardScreen()">LEADERBOARD</button>
+    <button class="btn" onclick="changeScreen('credits')">CREDITS</button>
+  </div>
+</div>
+
+<div id="level-select" class="hidden">
+  <div class="logo" style="font-size:1.5rem;margin-bottom:20px">Select Level</div>
+  <div class="carousel-container">
+    <div class="pack-box pack-1 id-pack" id="pack-box-1"><div class="pack-title" style="color:var(--pack-1-green)">PACK 1: WARMUP</div><div class="level-grid-select" id="pack-1-levels"></div></div>
+    <div class="pack-box pack-2 id-pack hidden" id="pack-box-2"><div class="pack-title" style="color:var(--pack-2-yellow)">PACK 2: CHAOS</div><div class="level-grid-select" id="pack-2-levels"></div></div>
+    <div class="pack-box pack-3 id-pack hidden" id="pack-box-3"><div class="pack-title" style="color:var(--pack-3-red)">PACK 3: DECOYS</div><div class="level-grid-select" id="pack-3-levels"></div></div>
+  </div>
+  <div class="carousel-controls"><button class="btn" style="padding:8px 16px" onclick="cyclePack(-1)">◀ Prev</button><button class="btn" style="padding:8px 16px" onclick="cyclePack(1)">Next ▶</button></div>
+  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Back to Menu</button>
+</div>
+
+<div id="gameplay" class="hidden">
+  <div class="stats"><div>Level: <span id="stat-level">1</span></div><div>Time: <span id="stat-timer">0.0</span>s</div><div>Cleared: <span id="stat-progress">0</span>/12</div></div>
+  <div class="scanner-tabs" id="scanner-tabs"></div>
+  <div class="game-grid" id="grid"></div>
+  <button class="btn" style="width:100%" onclick="giveUp()">GIVE UP</button>
+  <div class="modal hidden" id="clear-modal">
+    <h2>Level Cleared!</h2><p>Time: <span id="modal-time">0.0</span> seconds</p>
+    <button class="btn btn-primary" onclick="nextLevel()">Next Level</button>
+    <button class="btn" onclick="giveUp()">Return to Menu</button>
+  </div>
+</div>
+
+<div id="leaderboard-screen" class="hidden">
+  <div class="logo" style="font-size:1.5rem;margin-bottom:10px">Global Speedruns</div>
+  <table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>Time</th></tr></thead><tbody id="leaderboard-body"></tbody></table>
+  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Back to Menu</button>
+</div>
+
+<div id="credits" class="hidden">
+  <div class="logo">§ymbol §eeker</div>
+  <div class="credits-text">
+    <h2>Credits</h2>
+    <p>Designed by a True Seeker.</p>
+    <p>Thank you for supporting §ymbol §eeker!</p>
+  </div>
+  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Back to Menu</button>
+</div>
+
+<div id="congratulations" class="hidden">
+  <div class="logo">§ymbol §eeker</div>
+  <div class="credits-text">
+    <h2>🎉 Congratulations! 🎉</h2>
+    <p>You have conquered all 15 visual mind-melting levels! Your eyes are truly elite.</p>
+  </div>
+  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Main Menu</button>
+  <button class="btn" style="width:100%;margin-top:10px" onclick="launchLevel(1)">Replay Game</button>
+</div>
+
+<div id="speedrun-results" class="hidden">
+  <div class="logo">§ymbol §eeker</div>
+  <div class="credits-text">
+    <h2>Your Speedrun Finish!</h2>
+    <h1><span id="sr-final-time">0.0</span>s</h1>
+    <input id="player-name-input" maxlength="24" placeholder="Your name">
+    <button class="btn btn-primary" onclick="publishSpeedrunTime()">Publish Time</button>
+  </div>
+  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('congratulations')">Congratulations Screen</button>
+  <button class="btn" style="width:100%;margin-top:10px" onclick="changeScreen('main-menu')">Main Menu</button>
+</div>
+</div>
+
+<script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+function playSound(type){
+  if(audioCtx.state==='suspended') audioCtx.resume();
+  const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.connect(gain);gain.connect(audioCtx.destination);
+  if(type==='tick'){osc.type='triangle';osc.frequency.value=600;gain.gain.setValueAtTime(.1,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.05);osc.start();osc.stop(audioCtx.currentTime+.05)}
+  else if(type==='pop'){osc.type='sine';osc.frequency.setValueAtTime(400,audioCtx.currentTime);osc.frequency.exponentialRampToValueAtTime(800,audioCtx.currentTime+.1);gain.gain.setValueAtTime(.1,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.1);osc.start();osc.stop(audioCtx.currentTime+.1)}
+  else {osc.type='sawtooth';osc.frequency.value=120;gain.gain.setValueAtTime(.2,audioCtx.currentTime);gain.gain.linearRampToValueAtTime(.001,audioCtx.currentTime+.25);osc.start();osc.stop(audioCtx.currentTime+.25)}
+}
+const LABELS={'3':'3','8':'8','B':'B','&':'&','N':'N','H':'H','h':'h','n':'n','/':'/','\\':'\\','|':'Bar','¦':'¦','I':'i','1':'One','l':'L'};
+const LEVELS={
+1:{grid:'3x3',targets:['3','8','B'],decoys:[]},2:{grid:'3x3',targets:['N','H','h'],decoys:[]},3:{grid:'3x3',targets:['/','\\','|'],decoys:[]},4:{grid:'3x3',targets:['I','1','|'],decoys:[]},5:{grid:'3x3',targets:['5','8','H'],decoys:[]},
+6:{grid:'4x3',targets:['3','8','B','&'],decoys:[]},7:{grid:'4x3',targets:['N','H','h','n'],decoys:[]},8:{grid:'4x3',targets:['/','\\','|','¦'],decoys:[]},9:{grid:'4x3',targets:['I','1','|','l'],decoys:[]},10:{grid:'4x3',targets:['5','8','H','|'],decoys:[]},
+11:{grid:'4x4',targets:['3','8','B','&'],decoys:[':', '%','$','6']},12:{grid:'4x4',targets:['N','H','h','n'],decoys:['u','r','M','z']},13:{grid:'4x4',targets:['/','\\','|','¦'],decoys:[':','`','∕','_']},14:{grid:'4x4',targets:['I','1','|','l'],decoys:['!',"'",':','ł']},15:{grid:'4x4',targets:['5','8','H','|'],decoys:['6','/','N','N']}
+};
+let unlockedLevel=parseInt(localStorage.getItem('ss_unlocked'))||1;
+let globalLeaderboard=JSON.parse(localStorage.getItem('ss_leaderboard'))||[];
+let currentPackIndex=1,currentLevel=1,isSpeedrun=false,activeTarget='',levelItems=[],totalRequiredMatches=12,totalCurrentFound=0,timerValue=0,timerInterval=null;
+
+function changeScreen(id){
+  ['main-menu','level-select','gameplay','leaderboard-screen','credits','congratulations','speedrun-results']
+    .forEach(x=>document.getElementById(x).classList.add('hidden'));
+  document.getElementById(id).classList.remove('hidden');
+  if(id==='level-select') renderCarousel();
+}
+function renderCarousel(){document.querySelectorAll('.id-pack').forEach(p=>p.classList.add('hidden'));document.getElementById(`pack-box-${currentPackIndex}`).classList.remove('hidden');const ranges={1:[1,5],2:[6,10],3:[11,15]},range=ranges[currentPackIndex],box=document.getElementById(`pack-${currentPackIndex}-levels`);box.innerHTML='';for(let i=range[0];i<=range[1];i++){const b=document.createElement('button');b.className=`lvl-btn ${i>unlockedLevel?'locked':''}`;b.textContent=i;if(i<=unlockedLevel)b.onclick=()=>launchLevel(i);box.appendChild(b)}}
+function cyclePack(dir){currentPackIndex+=dir;if(currentPackIndex<1)currentPackIndex=3;if(currentPackIndex>3)currentPackIndex=1;renderCarousel()}
+function startTimer(){timerValue=0;document.getElementById('stat-timer').textContent='0.0';clearInterval(timerInterval);timerInterval=setInterval(()=>{timerValue+=.1;document.getElementById('stat-timer').textContent=timerValue.toFixed(1)},100)}
+function launchLevel(n){currentLevel=n;isSpeedrun=false;document.getElementById('clear-modal').classList.add('hidden');changeScreen('gameplay');setupLevelLayout();startTimer()}
+function startSpeedrun(){currentLevel=1;isSpeedrun=true;document.getElementById('clear-modal').classList.add('hidden');changeScreen('gameplay');setupLevelLayout();startTimer()}
+function setupLevelLayout(){
+  const c=LEVELS[currentLevel];
+  document.getElementById('stat-level').textContent=currentLevel;
+  const tabs=document.getElementById('scanner-tabs');
+  tabs.innerHTML='';
+  c.targets.forEach((t,i)=>{
+    const b=document.createElement('button');
+    b.className=`tab ${i===0?'active':''}`;
+    b.textContent=LABELS[t]||t;
+    b.onclick=()=>{
+      playSound('tick');
+      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      activeTarget=t;
+    };
+    tabs.appendChild(b);
+  });
+  activeTarget=c.targets[0];
+  levelItems=[];
+  c.targets.forEach(t=>{
+    for(let i=0;i<3;i++) levelItems.push({char:t,isDecoy:false,matched:false});
+  });
+  totalRequiredMatches=levelItems.length;
+  totalCurrentFound=0;
+  document.getElementById('stat-progress').textContent=`0/${totalRequiredMatches}`;
+  c.decoys.forEach(d=>levelItems.push({char:d,isDecoy:true,matched:false}));
+  const grid=document.getElementById('grid');
+  grid.className=`game-grid grid-${c.grid}`;
+  shuffleAndRenderGrid();
+}
+function shuffleAndRenderGrid(){const unmatched=levelItems.filter(x=>!x.matched);for(let i=unmatched.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[unmatched[i],unmatched[j]]=[unmatched[j],unmatched[i]]}let n=0;levelItems=levelItems.map(x=>x.matched?x:unmatched[n++]);const grid=document.getElementById('grid');grid.innerHTML='';levelItems.forEach((item,i)=>{const cell=document.createElement('div');cell.className=`cell ${item.matched?'matched':''}`;cell.textContent=item.char;cell.onclick=()=>handleBlockSelection(i);grid.appendChild(cell)})}
+function handleBlockSelection(i){
+  const item=levelItems[i];
+  if(item.matched) return;
+
+  if(!item.isDecoy && item.char===activeTarget){
+    item.matched=true;
+    totalCurrentFound++;
+    playSound('pop');
+    document.getElementById('stat-progress').textContent=`${totalCurrentFound}/${totalRequiredMatches}`;
+
+    // Correct selections stay exactly where they are.
+    // Only a failure resets and reshuffles the board.
+    document.querySelectorAll('#grid .cell')[i].classList.add('matched');
+
+    if(totalCurrentFound===totalRequiredMatches) handleLevelVictory();
+  }else{
+    playSound('buzz');
+    levelItems.forEach(x=>x.matched=false);
+    totalCurrentFound=0;
+    document.getElementById('stat-progress').textContent=`0/${totalRequiredMatches}`;
+    shuffleAndRenderGrid();
+  }
+}
+function handleLevelVictory(){
+  if(isSpeedrun){
+    if(currentLevel===15){
+      clearInterval(timerInterval);
+      document.getElementById('sr-final-time').textContent=timerValue.toFixed(1);
+      changeScreen('speedrun-results');
+    }else{
+      currentLevel++;
+      setupLevelLayout();
+    }
+  }else{
+    clearInterval(timerInterval);
+    document.getElementById('modal-time').textContent=timerValue.toFixed(1);
+    document.getElementById('clear-modal').classList.remove('hidden');
+    if(currentLevel===unlockedLevel&&unlockedLevel<15){
+      unlockedLevel++;
+      localStorage.setItem('ss_unlocked',unlockedLevel);
+    }
+  }
+}
+function nextLevel(){
+  if(currentLevel===15){
+    document.getElementById('clear-modal').classList.add('hidden');
+    changeScreen('congratulations');
+  }else{
+    launchLevel(currentLevel+1);
+  }
+}
+function giveUp(){clearInterval(timerInterval);document.getElementById('clear-modal').classList.add('hidden');changeScreen('level-select')}
+function showLeaderboardScreen(){
+  changeScreen('leaderboard-screen');
+  const body=document.getElementById('leaderboard-body');
+  body.innerHTML='';
+  globalLeaderboard.sort((a,b)=>a.time-b.time);
+
+  if(globalLeaderboard.length===0){
+    const tr=document.createElement('tr');
+    tr.innerHTML='<td colspan="3" style="text-align:center;color:var(--text-muted)">No speedruns published yet.</td>';
+    body.appendChild(tr);
+    return;
+  }
+
+  globalLeaderboard.slice(0,10).forEach((e,i)=>{
+    const tr=document.createElement('tr');
+    tr.innerHTML=`<td>#${i+1}</td><td>${escapeHTML(e.name)}</td><td>${e.time.toFixed(1)}s</td>`;
+    body.appendChild(tr);
+  });
+}
+function escapeHTML(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
+function publishSpeedrunTime(){const input=document.getElementById('player-name-input'),name=input.value.trim()||'Anonymous Seeker';globalLeaderboard.push({name,time:timerValue});localStorage.setItem('ss_leaderboard',JSON.stringify(globalLeaderboard));input.value='';showLeaderboardScreen()}
+</script>
+</body>
+</html>
