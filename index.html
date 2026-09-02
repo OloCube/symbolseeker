@@ -3,235 +3,3355 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>§ymbol §eeker</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg-dark:#121214;--panel-bg:#1c1c1e;--accent-orange:#ff6b00;--text-light:#f4f4f5;--text-muted:#a1a1aa;--pack-1-green:#22c55e;--pack-2-yellow:#eab308;--pack-3-red:#ef4444}
-*{box-sizing:border-box} body{font-family:'Bricolage Grotesque',sans-serif;background:var(--bg-dark);color:var(--text-light);margin:0;padding:20px;display:flex;align-items:center;justify-content:center;min-height:100vh;user-select:none}
-.container{background:var(--panel-bg);padding:24px;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.5);width:100%;max-width:420px;text-align:center;position:relative}
-.logo{font-size:2.2rem;font-weight:800;color:var(--accent-orange);margin-bottom:30px;letter-spacing:-1px}.menu-buttons{display:flex;flex-direction:column;gap:12px}
-.btn{background:#27272a;color:var(--text-light);border:2px solid transparent;padding:14px;font-size:1.1rem;font-weight:700;border-radius:10px;cursor:pointer;font-family:inherit;transition:.15s}.btn:hover{border-color:var(--accent-orange);background:#3f3f46}.btn-primary{background:var(--accent-orange);color:white}.btn-primary:hover{background:#e05e00;border-color:transparent}.hidden{display:none!important}
-.carousel-container{position:relative;margin-bottom:20px}.pack-box{border-radius:12px;padding:20px;margin-bottom:15px;text-align:center}.pack-box.pack-1{border:3px solid var(--pack-1-green);background:rgba(34,197,94,.05)}.pack-box.pack-2{border:3px solid var(--pack-2-yellow);background:rgba(234,179,8,.05)}.pack-box.pack-3{border:3px solid var(--pack-3-red);background:rgba(239,68,68,.05)}
-.pack-title{font-size:1.3rem;font-weight:800;margin-bottom:15px}.level-grid-select{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}.lvl-btn{background:#27272a;color:var(--text-light);border:none;padding:10px 0;font-weight:700;border-radius:6px;cursor:pointer}.lvl-btn.locked{opacity:.3;cursor:not-allowed}
-.carousel-controls{display:flex;justify-content:space-between;align-items:center}.stats{display:flex;justify-content:space-between;margin-bottom:15px;font-size:.9rem;color:var(--text-muted);font-weight:600}
-.scanner-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:15px;background:#121214;padding:6px;border-radius:8px}.tab{background:#27272a;color:var(--text-muted);border:none;padding:8px 0;font-weight:700;font-size:.85rem;border-radius:6px;cursor:pointer;font-family:inherit}.tab.active{background:var(--accent-orange);color:white}
-.game-grid{display:grid;gap:8px;margin:0 auto 20px}.grid-3x3{grid-template-columns:repeat(3,1fr);max-width:280px}.grid-4x3{grid-template-columns:repeat(3,1fr);max-width:280px}.grid-4x4{grid-template-columns:repeat(4,1fr);max-width:280px}.cell{aspect-ratio:1;background:#27272a;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;color:white;font-weight:300;font-family:"Century Gothic",Futura,"Gill Sans",Arial,sans-serif}.cell.matched{background:#14532d;color:#4ade80;pointer-events:none}
-.modal{background:rgba(0,0,0,.88);position:absolute;inset:0;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;z-index:10}.modal h2{margin-top:0}.modal .btn{width:100%;margin-top:10px}
-.leaderboard-table{width:100%;border-collapse:collapse;margin-top:15px}.leaderboard-table th,.leaderboard-table td{padding:8px;text-align:left;border-bottom:1px solid #27272a}.credits-text{color:var(--text-muted);line-height:1.5}
-input{width:100%;padding:12px;border-radius:8px;border:1px solid #444;background:#27272a;color:white;font:inherit;margin:10px 0}
+:root{
+  --bg:#121214;
+  --panel:#1c1c1e;
+  --accent:#ff6b00;
+  --text:#f4f4f5;
+  --muted:#a1a1aa;
+  --green:#22c55e;
+  --yellow:#eab308;
+  --red:#ef4444;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:20px;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Bricolage Grotesque',sans-serif;
+}
+
+.container{
+  width:100%;
+  max-width:420px;
+  padding:24px;
+  background:var(--panel);
+  border-radius:16px;
+  box-shadow:0 10px 30px #0008;
+  text-align:center;
+  position:relative;
+}
+
+.hidden{
+  display:none!important;
+}
+
+.logo{
+  font-size:2.2rem;
+  font-weight:800;
+  color:var(--accent);
+  letter-spacing:-1px;
+  margin-bottom:25px;
+}
+
+.menu-buttons{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+/* BOLD BUTTONS */
+.btn{
+  width:100%;
+  padding:13px;
+  border:2px solid transparent;
+  border-radius:10px;
+  background:#27272a;
+  color:var(--text);
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:1rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.btn:hover{
+  border-color:var(--accent);
+  background:#3f3f46;
+}
+
+.btn-primary{
+  background:var(--accent);
+  color:#fff;
+}
+
+.btn-primary:hover{
+  background:#e05e00;
+  border-color:transparent;
+}
+
+.pack-box{
+  padding:18px;
+  border-radius:12px;
+  margin-bottom:14px;
+}
+
+.pack-1{border:3px solid var(--green)}
+.pack-2{border:3px solid var(--yellow)}
+.pack-3{border:3px solid var(--red)}
+
+.pack-title{
+  font-size:1.25rem;
+  font-weight:800;
+  margin-bottom:14px;
+}
+
+.level-grid-select{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:8px;
+}
+
+.lvl-btn{
+  padding:10px 0;
+  border:0;
+  border-radius:6px;
+  background:#27272a;
+  color:white;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:1rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.locked{
+  opacity:.3;
+  cursor:not-allowed;
+}
+
+.carousel-controls,
+.two-buttons{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.stats{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:14px;
+  color:var(--muted);
+  font-size:.88rem;
+  font-weight:700;
+}
+
+.scanner-tabs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  background:#121214;
+  padding:6px;
+  border-radius:8px;
+  margin-bottom:15px;
+}
+
+.tab{
+  border:0;
+  border-radius:6px;
+  background:#27272a;
+  color:var(--muted);
+  padding:8px 2px;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:.8rem;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.tab.active{
+  background:var(--accent);
+  color:white;
+}
+
+.game-grid,
+.editor-grid{
+  display:grid;
+  gap:8px;
+  margin:0 auto 18px;
+  max-width:300px;
+}
+
+.grid-3x3,
+.grid-4x3{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.grid-4x4{
+  grid-template-columns:repeat(4,1fr);
+}
+
+.cell{
+  aspect-ratio:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:#27272a;
+  color:#fff;
+  font:300 2rem "Century Gothic",Futura,Arial,sans-serif;
+  cursor:pointer;
+}
+
+.cell.matched{
+  background:#14532d;
+  color:#4ade80;
+  pointer-events:none;
+}
+
+.modal{
+  position:absolute;
+  inset:0;
+  padding:20px;
+  border-radius:16px;
+  background:#000e;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:5;
+}
+
+.modal h2{
+  margin:0;
+}
+
+.modal .btn{
+  margin-top:10px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:12px;
+}
+
+th,td{
+  padding:8px;
+  text-align:left;
+  border-bottom:1px solid #333;
+}
+
+.small{
+  color:var(--muted);
+  font-size:.85rem;
+  line-height:1.4;
+}
+
+.pb{
+  font-weight:800;
+  color:#4ade80;
+  margin:8px 0;
+}
+
+input,
+select{
+  width:100%;
+  padding:11px;
+  border-radius:8px;
+  border:1px solid #555;
+  background:#27272a;
+  color:white;
+  font:inherit;
+  margin:5px 0 10px;
+}
+
+label{
+  display:block;
+  text-align:left;
+  color:var(--muted);
+  font-size:.85rem;
+  margin-top:8px;
+}
+
+.palette{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  justify-content:center;
+  margin:10px 0;
+}
+
+.palette button{
+  min-width:38px;
+  padding:8px;
+  border:1px solid #555;
+  border-radius:6px;
+  background:#333;
+  color:white;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.palette button.selected{
+  border-color:var(--accent);
+  background:#573719;
+}
+
+.editor-grid button{
+  aspect-ratio:1;
+  border:1px solid #444;
+  border-radius:7px;
+  background:#27272a;
+  color:white;
+  font-size:1.3rem;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-weight:800;
+  cursor:pointer;
+}
+
+.code{
+  word-break:break-all;
+  background:#121214;
+  border-radius:8px;
+  padding:10px;
+  font-size:.8rem;
+  user-select:text;
+  text-align:left;
+}
 </style>
 </head>
+
 <body>
-<div class="container" id="app">
+
+<div class="container">
+
+<!-- MAIN MENU -->
 
 <div id="main-menu">
-  <div class="logo">§ymbol §eeker</div>
-  <div class="menu-buttons">
-    <button class="btn btn-primary" onclick="changeScreen('level-select')">PLAY</button>
-    <button class="btn" onclick="startSpeedrun()">SPEEDRUN</button>
-    <button class="btn" onclick="showLeaderboardScreen()">LEADERBOARD</button>
-    <button class="btn" onclick="changeScreen('credits')">CREDITS</button>
-  </div>
+
+<div class="logo">§ymbol §eeker</div>
+
+<div class="menu-buttons">
+
+<button class="btn btn-primary"
+onclick="changeScreen('level-select')">
+PLAY
+</button>
+
+<button class="btn"
+onclick="startSpeedrun()">
+SPEEDRUN
+</button>
+
+<button class="btn"
+onclick="showLeaderboardScreen()">
+LEADERBOARD
+</button>
+
+<button class="btn"
+onclick="changeScreen('custom-levels')">
+CUSTOM LEVELS
+</button>
+
+<button class="btn"
+onclick="changeScreen('credits')">
+CREDITS
+</button>
+
 </div>
+</div>
+
+
+<!-- LEVEL SELECT -->
 
 <div id="level-select" class="hidden">
-  <div class="logo" style="font-size:1.5rem;margin-bottom:20px">Select Level</div>
-  <div class="carousel-container">
-    <div class="pack-box pack-1 id-pack" id="pack-box-1"><div class="pack-title" style="color:var(--pack-1-green)">PACK 1: WARMUP</div><div class="level-grid-select" id="pack-1-levels"></div></div>
-    <div class="pack-box pack-2 id-pack hidden" id="pack-box-2"><div class="pack-title" style="color:var(--pack-2-yellow)">PACK 2: CHAOS</div><div class="level-grid-select" id="pack-2-levels"></div></div>
-    <div class="pack-box pack-3 id-pack hidden" id="pack-box-3"><div class="pack-title" style="color:var(--pack-3-red)">PACK 3: DECOYS</div><div class="level-grid-select" id="pack-3-levels"></div></div>
-  </div>
-  <div class="carousel-controls"><button class="btn" style="padding:8px 16px" onclick="cyclePack(-1)">◀ Prev</button><button class="btn" style="padding:8px 16px" onclick="cyclePack(1)">Next ▶</button></div>
-  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Back to Menu</button>
+
+<div class="logo" style="font-size:1.5rem">
+Select Level
 </div>
+
+<div id="pack-box-1" class="pack-box pack-1 id-pack">
+
+<div class="pack-title" style="color:var(--green)">
+PACK 1: WARMUP
+</div>
+
+<div class="level-grid-select"
+id="pack-1-levels"></div>
+
+</div>
+
+
+<div id="pack-box-2"
+class="pack-box pack-2 id-pack hidden">
+
+<div class="pack-title"
+style="color:var(--yellow)">
+PACK 2: CHAOS
+</div>
+
+<div class="level-grid-select"
+id="pack-2-levels"></div>
+
+</div>
+
+
+<div id="pack-box-3"
+class="pack-box pack-3 id-pack hidden">
+
+<div class="pack-title"
+style="color:var(--red)">
+PACK 3: DECOYS
+</div>
+
+<div class="level-grid-select"
+id="pack-3-levels"></div>
+
+</div>
+
+
+<div class="carousel-controls">
+
+<button class="btn"
+onclick="cyclePack(-1)">
+◀ Prev
+</button>
+
+<button class="btn"
+onclick="cyclePack(1)">
+Next ▶
+</button>
+
+</div>
+
+<button class="btn"
+style="margin-top:12px"
+onclick="changeScreen('main-menu')">
+Back to Menu
+</button>
+
+</div>
+
+
+<!-- GAMEPLAY -->
 
 <div id="gameplay" class="hidden">
-  <div class="stats"><div>Level: <span id="stat-level">1</span></div><div>Time: <span id="stat-timer">0.0</span>s</div><div>Cleared: <span id="stat-progress">0</span>/12</div></div>
-  <div class="scanner-tabs" id="scanner-tabs"></div>
-  <div class="game-grid" id="grid"></div>
-  <button class="btn" style="width:100%" onclick="giveUp()">GIVE UP</button>
-  <div class="modal hidden" id="clear-modal">
-    <h2>Level Cleared!</h2><p>Time: <span id="modal-time">0.0</span> seconds</p>
-    <button class="btn btn-primary" onclick="nextLevel()">Next Level</button>
-    <button class="btn" onclick="giveUp()">Return to Menu</button>
-  </div>
+
+<div class="stats">
+
+<div>
+Level:
+<span id="stat-level">1</span>
 </div>
 
-<div id="leaderboard-screen" class="hidden">
-  <div class="logo" style="font-size:1.5rem;margin-bottom:10px">Global Speedruns</div>
-  <table class="leaderboard-table"><thead><tr><th>Rank</th><th>Name</th><th>Time</th></tr></thead><tbody id="leaderboard-body"></tbody></table>
-  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Back to Menu</button>
+<div>
+Time:
+<span id="stat-timer">0.0</span>s
 </div>
 
-<div id="credits" class="hidden">
-  <div class="logo">§ymbol §eeker</div>
-  <div class="credits-text">
-    <h2>Credits</h2>
-    <p>Designed by a True Seeker.</p>
-    <p>Thank you for supporting §ymbol §eeker!</p>
-  </div>
-  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Back to Menu</button>
+<div>
+Cleared:
+<span id="stat-progress">0</span>/9
 </div>
 
-<div id="congratulations" class="hidden">
-  <div class="logo">§ymbol §eeker</div>
-  <div class="credits-text">
-    <h2>🎉 Congratulations! 🎉</h2>
-    <p>You have conquered all 15 visual mind-melting levels! Your eyes are truly elite.</p>
-  </div>
-  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('main-menu')">Main Menu</button>
-  <button class="btn" style="width:100%;margin-top:10px" onclick="launchLevel(1)">Replay Game</button>
 </div>
 
-<div id="speedrun-results" class="hidden">
-  <div class="logo">§ymbol §eeker</div>
-  <div class="credits-text">
-    <h2>Your Speedrun Finish!</h2>
-    <h1><span id="sr-final-time">0.0</span>s</h1>
-    <input id="player-name-input" maxlength="24" placeholder="Your name">
-    <button class="btn btn-primary" onclick="publishSpeedrunTime()">Publish Time</button>
-  </div>
-  <button class="btn" style="width:100%;margin-top:20px" onclick="changeScreen('congratulations')">Congratulations Screen</button>
-  <button class="btn" style="width:100%;margin-top:10px" onclick="changeScreen('main-menu')">Main Menu</button>
+<div class="scanner-tabs"
+id="scanner-tabs"></div>
+
+<div class="game-grid"
+id="grid"></div>
+
+<button class="btn"
+onclick="giveUp()">
+GIVE UP
+</button>
+
+
+<div id="clear-modal"
+class="modal hidden">
+
+<h2>Level Cleared!</h2>
+
+<p>
+Time:
+<span id="modal-time">0.0</span>
+seconds
+</p>
+
+<button id="continue-button"
+class="btn btn-primary"
+onclick="nextLevel()">
+Next Level
+</button>
+
+<button class="btn"
+onclick="giveUp()">
+Return to Menu
+</button>
+
 </div>
+
 </div>
+
+
+<!-- LEADERBOARD -->
+
+<div id="leaderboard-screen"
+class="hidden">
+
+<div class="logo"
+style="font-size:1.5rem">
+Global Speedruns
+</div>
+
+<table>
+
+<thead>
+<tr>
+<th>Rank</th>
+<th>Name</th>
+<th>Time</th>
+</tr>
+</thead>
+
+<tbody id="leaderboard-body"></tbody>
+
+</table>
+
+<button class="btn"
+style="margin-top:15px"
+onclick="changeScreen('main-menu')">
+Back to Menu
+</button>
+
+</div>
+
+
+<!-- CUSTOM LEVEL MENU -->
+
+<div id="custom-levels"
+class="hidden">
+
+<div class="logo"
+style="font-size:1.5rem">
+Custom Levels
+</div>
+
+<div class="two-buttons">
+
+<button class="btn btn-primary"
+onclick="openCustomCreator()">
+MAKE NEW
+</button>
+
+<button class="btn"
+onclick="changeScreen('load-custom')">
+LOAD LEVEL
+</button>
+
+</div>
+
+<button class="btn"
+style="margin-top:12px"
+onclick="changeScreen('main-menu')">
+Back to Menu
+</button>
+
+</div>
+
+
+<!-- CUSTOM CREATOR -->
+
+<div id="custom-creator"
+class="hidden">
+
+<div class="logo"
+style="font-size:1.35rem;margin-bottom:8px">
+Make a Level
+</div>
+
+<label>Grid size</label>
+
+<select id="custom-grid-size"
+onchange="resetCustomEditor()">
+
+<option value="3x3">3×3</option>
+<option value="4x3">4×3</option>
+<option value="4x4">4×4</option>
+
+</select>
+
+
+<label>Target symbols</label>
+
+<input id="custom-targets"
+placeholder="Example: 38B or 3 8 B"
+oninput="resetCustomEditor()">
+
+
+<label>Optional decoy symbols</label>
+
+<input id="custom-decoys"
+placeholder="Example: :%$"
+oninput="resetCustomEditor()">
+
+
+<div class="small">
+
+Choose a symbol below, then click squares
+to place it.
+
+Right-click a square to clear it.
+
+Or use Random Placement.
+
+</div>
+
+
+<div class="palette"
+id="custom-palette"></div>
+
+<div class="editor-grid"
+id="custom-editor-grid"></div>
+
+
+<div class="two-buttons">
+
+<button class="btn"
+onclick="randomCustomPlacement()">
+RANDOM PLACEMENT
+</button>
+
+<button class="btn"
+onclick="clearCustomPlacement()">
+CLEAR
+</button>
+
+</div>
+
+
+<button class="btn btn-primary"
+style="margin-top:10px"
+onclick="generateCustomCode()">
+GENERATE CODE
+</button>
+
+
+<div id="custom-code-output"
+class="code hidden"
+style="margin-top:10px"></div>
+
+
+<button id="play-custom-button"
+class="btn btn-primary hidden"
+style="margin-top:10px"
+onclick="playCreatedCustomLevel()">
+PLAY THIS LEVEL
+</button>
+
+
+<button class="btn"
+style="margin-top:10px"
+onclick="changeScreen('custom-levels')">
+Back
+</button>
+
+</div>
+
+
+<!-- LOAD CUSTOM -->
+
+<div id="load-custom"
+class="hidden">
+
+<div class="logo"
+style="font-size:1.35rem">
+Load Custom Level
+</div>
+
+<p class="small">
+Paste a custom level code here.
+</p>
+
+<input id="custom-code-input"
+placeholder="Paste level code">
+
+<button class="btn btn-primary"
+onclick="loadCustomCode()">
+LOAD & PLAY
+</button>
+
+<p id="custom-load-error"
+class="small"
+style="color:#ef4444"></p>
+
+<button class="btn"
+onclick="changeScreen('custom-levels')">
+Back
+</button>
+
+</div>
+
+
+<!-- CREDITS -->
+
+<div id="credits"
+class="hidden">
+
+<div class="logo">§ymbol §eeker</div>
+
+<h2>Credits</h2>
+
+<p class="small">
+Designed by a True Seeker.
+<br>
+Thank you for supporting §ymbol §eeker!
+</p>
+
+<button class="btn"
+style="margin-top:20px"
+onclick="changeScreen('main-menu')">
+Back to Menu
+</button>
+
+</div>
+
+
+<!-- NORMAL COMPLETION -->
+
+<div id="congratulations"
+class="hidden">
+
+<div class="logo">§ymbol §eeker</div>
+
+<h2>🎉 Congratulations! 🎉</h2>
+
+<p class="small">
+You have conquered all 15 visual
+mind-melting levels!
+
+Your eyes are truly elite.
+</p>
+
+<button class="btn btn-primary"
+style="margin-top:15px"
+onclick="changeScreen('credits')">
+View Credits
+</button>
+
+<button class="btn"
+style="margin-top:10px"
+onclick="changeScreen('main-menu')">
+Main Menu
+</button>
+
+</div>
+
+
+<!-- SPEEDRUN RESULTS -->
+
+<div id="speedrun-results"
+class="hidden">
+
+<div class="logo">§ymbol §eeker</div>
+
+<h2>Your Speedrun Finish!</h2>
+
+<h1>
+<span id="sr-final-time">0.0</span>s
+</h1>
+
+<div id="personal-best-display"
+class="pb"></div>
+
+<div class="small">
+
+<b>🎉 Congratulations! 🎉</b>
+
+<br>
+
+You have conquered all 15 visual
+mind-melting levels!
+
+Your eyes are truly elite.
+
+</div>
+
+
+<input id="player-name-input"
+maxlength="24"
+placeholder="Your name">
+
+
+<button class="btn btn-primary"
+onclick="publishSpeedrunTime()">
+Publish Time
+</button>
+
+
+<button class="btn"
+style="margin-top:10px"
+onclick="changeScreen('main-menu')">
+Main Menu
+</button>
+
+</div>
+
+</div>
+
 
 <script>
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+/* =====================================================
+   SYMBOL SEEKER
+   ===================================================== */
+
+
+/* =====================================================
+   SUPABASE SETTINGS
+
+   LEAVE THESE BLANK FOR NOW.
+
+   The setup instructions below explain exactly what to
+   paste here.
+   ===================================================== */
+
+const SUPABASE_URL = "";
+const SUPABASE_PUBLISHABLE_KEY = "";
+
+
+/* =====================================================
+   AUDIO
+   ===================================================== */
+
+const audioCtx =
+new(window.AudioContext || window.webkitAudioContext)();
+
+
 function playSound(type){
-  if(audioCtx.state==='suspended') audioCtx.resume();
-  const osc=audioCtx.createOscillator(),gain=audioCtx.createGain();osc.connect(gain);gain.connect(audioCtx.destination);
-  if(type==='tick'){osc.type='triangle';osc.frequency.value=600;gain.gain.setValueAtTime(.1,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.05);osc.start();osc.stop(audioCtx.currentTime+.05)}
-  else if(type==='pop'){osc.type='sine';osc.frequency.setValueAtTime(400,audioCtx.currentTime);osc.frequency.exponentialRampToValueAtTime(800,audioCtx.currentTime+.1);gain.gain.setValueAtTime(.1,audioCtx.currentTime);gain.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+.1);osc.start();osc.stop(audioCtx.currentTime+.1)}
-  else {osc.type='sawtooth';osc.frequency.value=120;gain.gain.setValueAtTime(.2,audioCtx.currentTime);gain.gain.linearRampToValueAtTime(.001,audioCtx.currentTime+.25);osc.start();osc.stop(audioCtx.currentTime+.25)}
+
+try{
+
+if(audioCtx.state === 'suspended'){
+audioCtx.resume();
 }
-const LABELS={'3':'3','8':'8','B':'B','&':'&','N':'N','H':'H','h':'h','n':'n','/':'/','\\':'\\','|':'Bar','¦':'¦','I':'i','1':'One','l':'L'};
-const LEVELS={
-1:{grid:'3x3',targets:['3','8','B'],decoys:[]},2:{grid:'3x3',targets:['N','H','h'],decoys:[]},3:{grid:'3x3',targets:['/','\\','|'],decoys:[]},4:{grid:'3x3',targets:['I','1','|'],decoys:[]},5:{grid:'3x3',targets:['5','8','H'],decoys:[]},
-6:{grid:'4x3',targets:['3','8','B','&'],decoys:[]},7:{grid:'4x3',targets:['N','H','h','n'],decoys:[]},8:{grid:'4x3',targets:['/','\\','|','¦'],decoys:[]},9:{grid:'4x3',targets:['I','1','|','l'],decoys:[]},10:{grid:'4x3',targets:['5','8','H','|'],decoys:[]},
-11:{grid:'4x4',targets:['3','8','B','&'],decoys:[':', '%','$','6']},12:{grid:'4x4',targets:['N','H','h','n'],decoys:['u','r','M','z']},13:{grid:'4x4',targets:['/','\\','|','¦'],decoys:[':','`','∕','_']},14:{grid:'4x4',targets:['I','1','|','l'],decoys:['!',"'",':','ł']},15:{grid:'4x4',targets:['5','8','H','|'],decoys:['6','/','N','N']}
+
+const o =
+audioCtx.createOscillator();
+
+const g =
+audioCtx.createGain();
+
+o.connect(g);
+
+g.connect(audioCtx.destination);
+
+let d = .1;
+
+
+if(type === 'tick'){
+
+o.type = 'triangle';
+
+o.frequency.value = 600;
+
+d = .05;
+
+}
+
+else if(type === 'pop'){
+
+o.type = 'sine';
+
+o.frequency.setValueAtTime(
+400,
+audioCtx.currentTime
+);
+
+o.frequency.exponentialRampToValueAtTime(
+800,
+audioCtx.currentTime + .1
+);
+
+}
+
+else{
+
+o.type = 'sawtooth';
+
+o.frequency.value = 120;
+
+d = .25;
+
+}
+
+
+g.gain.setValueAtTime(
+.12,
+audioCtx.currentTime
+);
+
+g.gain.exponentialRampToValueAtTime(
+.001,
+audioCtx.currentTime + d
+);
+
+o.start();
+
+o.stop(
+audioCtx.currentTime + d
+);
+
+}
+
+catch(e){}
+
+}
+
+
+/* =====================================================
+   LEVEL DATA
+   ===================================================== */
+
+const LABELS={
+
+'3':'3',
+'8':'8',
+'B':'B',
+'&':'&',
+
+'N':'N',
+'H':'H',
+'h':'h',
+'n':'n',
+
+'/':'/',
+'\\':'\\',
+'|':'Bar',
+'¦':'¦',
+
+'I':'i',
+'1':'One',
+'l':'L'
+
 };
-let unlockedLevel=parseInt(localStorage.getItem('ss_unlocked'))||1;
-let globalLeaderboard=JSON.parse(localStorage.getItem('ss_leaderboard'))||[];
-let currentPackIndex=1,currentLevel=1,isSpeedrun=false,activeTarget='',levelItems=[],totalRequiredMatches=12,totalCurrentFound=0,timerValue=0,timerInterval=null;
+
+
+const LEVELS={
+
+1:{
+grid:'3x3',
+targets:['3','8','B'],
+decoys:[]
+},
+
+2:{
+grid:'3x3',
+targets:['N','H','h'],
+decoys:[]
+},
+
+3:{
+grid:'3x3',
+targets:['/','\\','|'],
+decoys:[]
+},
+
+4:{
+grid:'3x3',
+targets:['I','1','|'],
+decoys:[]
+},
+
+5:{
+grid:'3x3',
+targets:['5','8','H'],
+decoys:[]
+},
+
+
+6:{
+grid:'4x3',
+targets:['3','8','B','&'],
+decoys:[]
+},
+
+7:{
+grid:'4x3',
+targets:['N','H','h','n'],
+decoys:[]
+},
+
+8:{
+grid:'4x3',
+targets:['/','\\','|','¦'],
+decoys:[]
+},
+
+9:{
+grid:'4x3',
+targets:['I','1','|','l'],
+decoys:[]
+},
+
+10:{
+grid:'4x3',
+targets:['5','8','H','|'],
+decoys:[]
+},
+
+
+11:{
+grid:'4x4',
+targets:['3','8','B','&'],
+decoys:[':','%','$','6']
+},
+
+12:{
+grid:'4x4',
+targets:['N','H','h','n'],
+decoys:['u','r','M','z']
+},
+
+13:{
+grid:'4x4',
+targets:['/','\\','|','¦'],
+decoys:[':','`','∕','_']
+},
+
+14:{
+grid:'4x4',
+targets:['I','1','|','l'],
+decoys:['!',"'",':','ł']
+},
+
+15:{
+grid:'4x4',
+targets:['5','8','H','|'],
+decoys:['6','/','N','N']
+}
+
+};
+
+
+/* =====================================================
+   GAME STATE
+   ===================================================== */
+
+let unlockedLevel =
+Math.max(
+1,
+Math.min(
+15,
+parseInt(
+localStorage.getItem(
+'ss_unlocked'
+)
+) || 1
+)
+);
+
+
+let currentPackIndex = 1;
+
+let currentLevel = 1;
+
+let isSpeedrun = false;
+
+let activeTarget = '';
+
+let levelItems = [];
+
+let totalRequiredMatches = 0;
+
+let totalCurrentFound = 0;
+
+let timerValue = 0;
+
+let timerInterval = null;
+
+let levelStartTimestamp = 0;
+
+let currentCustomLevel = null;
+
+let lastRunValid = true;
+
+let customEditorCells = [];
+
+let customSelectedSymbol = '';
+
+let customLevelData = null;
+
+
+/* =====================================================
+   BACKEND ADAPTER
+
+   THIS DOES NOT USE LOCAL STORAGE.
+
+   Personal Bests are separate and DO use localStorage.
+
+   Global leaderboard runs go only to Supabase.
+   ===================================================== */
+
+const BACKEND={
+
+enabled:()=>{
+
+return(
+SUPABASE_URL &&
+SUPABASE_PUBLISHABLE_KEY
+);
+
+},
+
+
+async fetchLeaderboard(){
+
+if(!this.enabled()){
+
+return [];
+
+}
+
+
+const response =
+await fetch(
+
+SUPABASE_URL +
+'/rest/v1/speedruns?select=name,time,created_at&order=time.asc&limit=10',
+
+{
+
+headers:{
+
+'apikey':
+SUPABASE_PUBLISHABLE_KEY,
+
+'Authorization':
+'Bearer ' +
+SUPABASE_PUBLISHABLE_KEY
+
+}
+
+}
+
+);
+
+
+if(!response.ok){
+
+throw new Error(
+'Could not load leaderboard.'
+);
+
+}
+
+
+return await response.json();
+
+},
+
+
+async submitRun(run){
+
+if(!this.enabled()){
+
+throw new Error(
+'Backend not configured.'
+);
+
+}
+
+
+const response =
+await fetch(
+
+SUPABASE_URL +
+'/rest/v1/speedruns',
+
+{
+
+method:'POST',
+
+headers:{
+
+'Content-Type':
+'application/json',
+
+'apikey':
+SUPABASE_PUBLISHABLE_KEY,
+
+'Authorization':
+'Bearer ' +
+SUPABASE_PUBLISHABLE_KEY,
+
+'Prefer':
+'return=minimal'
+
+},
+
+body:
+JSON.stringify(run)
+
+}
+
+);
+
+
+if(!response.ok){
+
+throw new Error(
+'Could not publish run.'
+);
+
+}
+
+
+return true;
+
+}
+
+};
+
+
+/* =====================================================
+   SCREENS
+   ===================================================== */
 
 function changeScreen(id){
-  ['main-menu','level-select','gameplay','leaderboard-screen','credits','congratulations','speedrun-results']
-    .forEach(x=>document.getElementById(x).classList.add('hidden'));
-  document.getElementById(id).classList.remove('hidden');
-  if(id==='level-select') renderCarousel();
+
+const screens=[
+
+'main-menu',
+'level-select',
+'gameplay',
+'leaderboard-screen',
+'custom-levels',
+'custom-creator',
+'load-custom',
+'credits',
+'congratulations',
+'speedrun-results'
+
+];
+
+
+screens.forEach(x=>{
+
+document
+.getElementById(x)
+.classList
+.add('hidden');
+
+});
+
+
+document
+.getElementById(id)
+.classList
+.remove('hidden');
+
+
+if(id === 'level-select'){
+
+renderCarousel();
+
 }
-function renderCarousel(){document.querySelectorAll('.id-pack').forEach(p=>p.classList.add('hidden'));document.getElementById(`pack-box-${currentPackIndex}`).classList.remove('hidden');const ranges={1:[1,5],2:[6,10],3:[11,15]},range=ranges[currentPackIndex],box=document.getElementById(`pack-${currentPackIndex}-levels`);box.innerHTML='';for(let i=range[0];i<=range[1];i++){const b=document.createElement('button');b.className=`lvl-btn ${i>unlockedLevel?'locked':''}`;b.textContent=i;if(i<=unlockedLevel)b.onclick=()=>launchLevel(i);box.appendChild(b)}}
-function cyclePack(dir){currentPackIndex+=dir;if(currentPackIndex<1)currentPackIndex=3;if(currentPackIndex>3)currentPackIndex=1;renderCarousel()}
-function startTimer(){timerValue=0;document.getElementById('stat-timer').textContent='0.0';clearInterval(timerInterval);timerInterval=setInterval(()=>{timerValue+=.1;document.getElementById('stat-timer').textContent=timerValue.toFixed(1)},100)}
-function launchLevel(n){currentLevel=n;isSpeedrun=false;document.getElementById('clear-modal').classList.add('hidden');changeScreen('gameplay');setupLevelLayout();startTimer()}
-function startSpeedrun(){currentLevel=1;isSpeedrun=true;document.getElementById('clear-modal').classList.add('hidden');changeScreen('gameplay');setupLevelLayout();startTimer()}
+
+}
+
+
+function packForLevel(n){
+
+return n <= 5
+? 1
+: n <= 10
+? 2
+: 3;
+
+}
+
+
+function unlockThrough(n){
+
+if(n > unlockedLevel){
+
+unlockedLevel =
+Math.min(15,n);
+
+localStorage.setItem(
+'ss_unlocked',
+unlockedLevel
+);
+
+}
+
+}
+
+
+/* =====================================================
+   LEVEL SELECT
+   ===================================================== */
+
+function renderCarousel(){
+
+document
+.querySelectorAll('.id-pack')
+.forEach(x=>x.classList.add('hidden'));
+
+
+document
+.getElementById(
+`pack-box-${currentPackIndex}`
+)
+.classList
+.remove('hidden');
+
+
+const ranges={
+
+1:[1,5],
+
+2:[6,10],
+
+3:[11,15]
+
+};
+
+
+const r =
+ranges[currentPackIndex];
+
+
+const box =
+document.getElementById(
+`pack-${currentPackIndex}-levels`
+);
+
+
+box.innerHTML='';
+
+
+for(
+let i=r[0];
+i<=r[1];
+i++
+){
+
+const b =
+document.createElement('button');
+
+
+b.className =
+'lvl-btn ' +
+(
+i > unlockedLevel
+? 'locked'
+: ''
+);
+
+
+b.textContent=i;
+
+
+if(i <= unlockedLevel){
+
+b.onclick =
+()=>launchLevel(i);
+
+}
+
+
+box.appendChild(b);
+
+}
+
+}
+
+
+function cyclePack(d){
+
+currentPackIndex += d;
+
+
+if(currentPackIndex < 1){
+
+currentPackIndex = 3;
+
+}
+
+
+if(currentPackIndex > 3){
+
+currentPackIndex = 1;
+
+}
+
+
+renderCarousel();
+
+}
+
+
+/* =====================================================
+   TIMER
+   ===================================================== */
+
+function startTimer(){
+
+timerValue = 0;
+
+levelStartTimestamp =
+performance.now();
+
+
+document
+.getElementById('stat-timer')
+.textContent='0.0';
+
+
+clearInterval(
+timerInterval
+);
+
+
+timerInterval =
+setInterval(()=>{
+
+timerValue =
+(
+performance.now()
+-
+levelStartTimestamp
+)
+/
+1000;
+
+
+document
+.getElementById('stat-timer')
+.textContent =
+timerValue.toFixed(1);
+
+},50);
+
+}
+
+
+/* =====================================================
+   NORMAL PLAY
+   ===================================================== */
+
+function launchLevel(n){
+
+currentCustomLevel = null;
+
+currentLevel = n;
+
+isSpeedrun = false;
+
+
+document
+.getElementById('clear-modal')
+.classList
+.add('hidden');
+
+
+changeScreen('gameplay');
+
+
+setupLevelLayout();
+
+
+startTimer();
+
+}
+
+
+function startSpeedrun(){
+
+currentCustomLevel = null;
+
+currentLevel = 1;
+
+isSpeedrun = true;
+
+
+unlockThrough(1);
+
+
+document
+.getElementById('clear-modal')
+.classList
+.add('hidden');
+
+
+changeScreen('gameplay');
+
+
+setupLevelLayout();
+
+
+startTimer();
+
+}
+
+
+/* =====================================================
+   BUILD LEVEL
+   ===================================================== */
+
 function setupLevelLayout(){
-  const c=LEVELS[currentLevel];
-  document.getElementById('stat-level').textContent=currentLevel;
-  const tabs=document.getElementById('scanner-tabs');
-  tabs.innerHTML='';
-  c.targets.forEach((t,i)=>{
-    const b=document.createElement('button');
-    b.className=`tab ${i===0?'active':''}`;
-    b.textContent=LABELS[t]||t;
-    b.onclick=()=>{
-      playSound('tick');
-      document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      activeTarget=t;
-    };
-    tabs.appendChild(b);
-  });
-  activeTarget=c.targets[0];
-  levelItems=[];
-  c.targets.forEach(t=>{
-    for(let i=0;i<3;i++) levelItems.push({char:t,isDecoy:false,matched:false});
-  });
-  totalRequiredMatches=levelItems.length;
-  totalCurrentFound=0;
-  document.getElementById('stat-progress').textContent=`0/${totalRequiredMatches}`;
-  c.decoys.forEach(d=>levelItems.push({char:d,isDecoy:true,matched:false}));
-  const grid=document.getElementById('grid');
-  grid.className=`game-grid grid-${c.grid}`;
-  shuffleAndRenderGrid();
+
+const c =
+LEVELS[currentLevel];
+
+
+document
+.getElementById('stat-level')
+.textContent =
+currentLevel;
+
+
+const tabs =
+document
+.getElementById('scanner-tabs');
+
+
+tabs.innerHTML='';
+
+
+c.targets.forEach(
+(t,i)=>{
+
+const b =
+document.createElement('button');
+
+
+b.className =
+'tab ' +
+(
+i === 0
+? 'active'
+: ''
+);
+
+
+b.textContent =
+LABELS[t] || t;
+
+
+b.onclick=()=>{
+
+playSound('tick');
+
+
+document
+.querySelectorAll('.tab')
+.forEach(
+x=>x.classList.remove('active')
+);
+
+
+b.classList.add('active');
+
+
+activeTarget=t;
+
+};
+
+
+tabs.appendChild(b);
+
 }
-function shuffleAndRenderGrid(){const unmatched=levelItems.filter(x=>!x.matched);for(let i=unmatched.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[unmatched[i],unmatched[j]]=[unmatched[j],unmatched[i]]}let n=0;levelItems=levelItems.map(x=>x.matched?x:unmatched[n++]);const grid=document.getElementById('grid');grid.innerHTML='';levelItems.forEach((item,i)=>{const cell=document.createElement('div');cell.className=`cell ${item.matched?'matched':''}`;cell.textContent=item.char;cell.onclick=()=>handleBlockSelection(i);grid.appendChild(cell)})}
+);
+
+
+activeTarget =
+c.targets[0];
+
+
+levelItems=[];
+
+
+/* Three of each target */
+
+c.targets.forEach(t=>{
+
+for(
+let i=0;
+i<3;
+i++
+){
+
+levelItems.push({
+
+char:t,
+
+isDecoy:false,
+
+matched:false
+
+});
+
+}
+
+});
+
+
+c.decoys.forEach(d=>{
+
+levelItems.push({
+
+char:d,
+
+isDecoy:true,
+
+matched:false
+
+});
+
+});
+
+
+totalRequiredMatches =
+levelItems
+.filter(
+x=>!x.isDecoy
+)
+.length;
+
+
+totalCurrentFound = 0;
+
+
+document
+.getElementById('stat-progress')
+.textContent =
+`0/${totalRequiredMatches}`;
+
+
+document
+.getElementById('grid')
+.className =
+`game-grid grid-${c.grid}`;
+
+
+shuffleAndRenderGrid();
+
+}
+
+
+/* =====================================================
+   GRID
+   ===================================================== */
+
+function shuffleAndRenderGrid(){
+
+const unmatched =
+levelItems.filter(
+x=>!x.matched
+);
+
+
+for(
+let i=unmatched.length-1;
+i>0;
+i--
+){
+
+const j =
+Math.floor(
+Math.random() *
+(i+1)
+);
+
+
+[
+unmatched[i],
+unmatched[j]
+]
+=
+[
+unmatched[j],
+unmatched[i]
+];
+
+}
+
+
+let k=0;
+
+
+levelItems =
+levelItems.map(x=>
+x.matched
+? x
+: unmatched[k++]
+);
+
+
+renderGrid();
+
+}
+
+
+function renderGrid(){
+
+const g =
+document.getElementById('grid');
+
+
+g.innerHTML='';
+
+
+levelItems.forEach(
+(item,i)=>{
+
+const c =
+document.createElement('div');
+
+
+c.className =
+'cell ' +
+(
+item.matched
+? 'matched'
+: ''
+);
+
+
+c.textContent =
+item.char;
+
+
+c.onclick =
+()=>handleBlockSelection(i);
+
+
+g.appendChild(c);
+
+}
+);
+
+}
+
+
+/* =====================================================
+   CLICK HANDLING
+   ===================================================== */
+
 function handleBlockSelection(i){
-  const item=levelItems[i];
-  if(item.matched) return;
 
-  if(!item.isDecoy && item.char===activeTarget){
-    item.matched=true;
-    totalCurrentFound++;
-    playSound('pop');
-    document.getElementById('stat-progress').textContent=`${totalCurrentFound}/${totalRequiredMatches}`;
+const item =
+levelItems[i];
 
-    // Correct selections stay exactly where they are.
-    // Only a failure resets and reshuffles the board.
-    document.querySelectorAll('#grid .cell')[i].classList.add('matched');
 
-    if(totalCurrentFound===totalRequiredMatches) handleLevelVictory();
-  }else{
-    playSound('buzz');
-    levelItems.forEach(x=>x.matched=false);
-    totalCurrentFound=0;
-    document.getElementById('stat-progress').textContent=`0/${totalRequiredMatches}`;
-    shuffleAndRenderGrid();
-  }
+if(item.matched){
+
+return;
+
 }
+
+
+if(
+
+!item.isDecoy
+
+&&
+
+item.char === activeTarget
+
+){
+
+item.matched=true;
+
+totalCurrentFound++;
+
+
+playSound('pop');
+
+
+document
+.getElementById('stat-progress')
+.textContent =
+`${totalCurrentFound}/${totalRequiredMatches}`;
+
+
+document
+.querySelectorAll('#grid .cell')[i]
+.classList
+.add('matched');
+
+
+if(
+totalCurrentFound
+===
+totalRequiredMatches
+){
+
+handleLevelVictory();
+
+}
+
+}
+
+
+else{
+
+
+playSound('buzz');
+
+
+levelItems.forEach(
+x=>x.matched=false
+);
+
+
+totalCurrentFound=0;
+
+
+document
+.getElementById('stat-progress')
+.textContent =
+`0/${totalRequiredMatches}`;
+
+
+/* Symbols move ONLY after failure */
+
+shuffleAndRenderGrid();
+
+}
+
+}
+
+
+/* =====================================================
+   VICTORY
+   ===================================================== */
+
+function packNameForNext(level){
+
+return level === 6
+? 'NEXT PACK: PACK 2: CHAOS'
+
+: level === 11
+? 'NEXT PACK: PACK 3: DECOYS'
+
+: 'NEXT LEVEL';
+
+}
+
+
 function handleLevelVictory(){
-  if(isSpeedrun){
-    if(currentLevel===15){
-      clearInterval(timerInterval);
-      document.getElementById('sr-final-time').textContent=timerValue.toFixed(1);
-      changeScreen('speedrun-results');
-    }else{
-      currentLevel++;
-      setupLevelLayout();
-    }
-  }else{
-    clearInterval(timerInterval);
-    document.getElementById('modal-time').textContent=timerValue.toFixed(1);
-    document.getElementById('clear-modal').classList.remove('hidden');
-    if(currentLevel===unlockedLevel&&unlockedLevel<15){
-      unlockedLevel++;
-      localStorage.setItem('ss_unlocked',unlockedLevel);
-    }
-  }
+
+
+/* CUSTOM LEVEL */
+
+if(currentCustomLevel){
+
+clearInterval(timerInterval);
+
+
+document
+.getElementById('modal-time')
+.textContent =
+timerValue.toFixed(1);
+
+
+document
+.getElementById('continue-button')
+.textContent =
+'Return to Custom Levels';
+
+
+document
+.getElementById('clear-modal')
+.classList
+.remove('hidden');
+
+
+return;
+
 }
+
+
+/* SPEEDRUN */
+
+if(isSpeedrun){
+
+if(currentLevel === 15){
+
+clearInterval(timerInterval);
+
+
+lastRunValid =
+validateSpeedrun();
+
+
+document
+.getElementById('sr-final-time')
+.textContent =
+timerValue.toFixed(1);
+
+
+if(lastRunValid){
+
+updatePersonalBest();
+
+}
+
+
+displayPersonalBest();
+
+
+changeScreen(
+'speedrun-results'
+);
+
+}
+
+else{
+
+currentLevel++;
+
+
+/* Speedrun progress unlocks main play */
+
+unlockThrough(
+currentLevel
+);
+
+
+setupLevelLayout();
+
+}
+
+}
+
+
+/* NORMAL PLAY */
+
+else{
+
+
+clearInterval(timerInterval);
+
+
+document
+.getElementById('modal-time')
+.textContent =
+timerValue.toFixed(1);
+
+
+if(currentLevel === 15){
+
+document
+.getElementById('continue-button')
+.textContent =
+'CONGRATULATIONS!';
+
+}
+
+else{
+
+document
+.getElementById('continue-button')
+.textContent =
+packNameForNext(
+currentLevel+1
+);
+
+}
+
+
+/* Unlock next normal level */
+
+if(
+
+currentLevel === unlockedLevel
+
+&&
+
+unlockedLevel < 15
+
+){
+
+unlockThrough(
+currentLevel+1
+);
+
+}
+
+
+document
+.getElementById('clear-modal')
+.classList
+.remove('hidden');
+
+}
+
+}
+
+
 function nextLevel(){
-  if(currentLevel===15){
-    document.getElementById('clear-modal').classList.add('hidden');
-    changeScreen('congratulations');
-  }else{
-    launchLevel(currentLevel+1);
-  }
-}
-function giveUp(){clearInterval(timerInterval);document.getElementById('clear-modal').classList.add('hidden');changeScreen('level-select')}
-function showLeaderboardScreen(){
-  changeScreen('leaderboard-screen');
-  const body=document.getElementById('leaderboard-body');
-  body.innerHTML='';
-  globalLeaderboard.sort((a,b)=>a.time-b.time);
 
-  if(globalLeaderboard.length===0){
-    const tr=document.createElement('tr');
-    tr.innerHTML='<td colspan="3" style="text-align:center;color:var(--text-muted)">No speedruns published yet.</td>';
-    body.appendChild(tr);
-    return;
-  }
+document
+.getElementById('clear-modal')
+.classList
+.add('hidden');
 
-  globalLeaderboard.slice(0,10).forEach((e,i)=>{
-    const tr=document.createElement('tr');
-    tr.innerHTML=`<td>#${i+1}</td><td>${escapeHTML(e.name)}</td><td>${e.time.toFixed(1)}s</td>`;
-    body.appendChild(tr);
-  });
+
+if(currentCustomLevel){
+
+currentCustomLevel=null;
+
+changeScreen(
+'custom-levels'
+);
+
+return;
+
 }
-function escapeHTML(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML}
-function publishSpeedrunTime(){const input=document.getElementById('player-name-input'),name=input.value.trim()||'Anonymous Seeker';globalLeaderboard.push({name,time:timerValue});localStorage.setItem('ss_leaderboard',JSON.stringify(globalLeaderboard));input.value='';showLeaderboardScreen()}
+
+
+if(currentLevel === 15){
+
+changeScreen(
+'congratulations'
+);
+
+return;
+
+}
+
+
+launchLevel(
+currentLevel+1
+);
+
+}
+
+
+function giveUp(){
+
+clearInterval(
+timerInterval
+);
+
+
+/* Giving up during a speedrun
+   keeps the level reached unlocked */
+
+if(isSpeedrun){
+
+unlockThrough(
+currentLevel
+);
+
+}
+
+
+currentCustomLevel=null;
+
+
+document
+.getElementById('clear-modal')
+.classList
+.add('hidden');
+
+
+changeScreen(
+'level-select'
+);
+
+}
+
+
+/* =====================================================
+   PERSONAL BEST
+   ===================================================== */
+
+function validateSpeedrun(){
+
+const elapsed =
+(
+performance.now()
+-
+levelStartTimestamp
+)
+/
+1000;
+
+
+/* Basic client-side anti-cheat */
+
+return(
+
+Number.isFinite(
+timerValue
+)
+
+&&
+
+timerValue > 1
+
+&&
+
+Math.abs(
+timerValue-elapsed
+)
+
+< 1.5
+
+);
+
+}
+
+
+function updatePersonalBest(){
+
+const old =
+Number(
+localStorage.getItem(
+'ss_personal_best'
+)
+);
+
+
+if(
+
+!old
+
+||
+
+timerValue < old
+
+){
+
+localStorage.setItem(
+
+'ss_personal_best',
+
+String(timerValue)
+
+);
+
+
+return true;
+
+}
+
+
+return false;
+
+}
+
+
+function displayPersonalBest(){
+
+const pb =
+Number(
+localStorage.getItem(
+'ss_personal_best'
+)
+);
+
+
+document
+.getElementById(
+'personal-best-display'
+)
+.textContent =
+
+pb
+
+? `Personal Best: ${pb.toFixed(1)}s`
+
+: 'First recorded speedrun!';
+
+}
+
+
+/* =====================================================
+   GLOBAL LEADERBOARD
+   ===================================================== */
+
+async function showLeaderboardScreen(){
+
+changeScreen(
+'leaderboard-screen'
+);
+
+
+const body =
+document
+.getElementById(
+'leaderboard-body'
+);
+
+
+/* Before Supabase is configured */
+
+if(!BACKEND.enabled()){
+
+body.innerHTML=
+
+'<tr><td colspan="3" ' +
+
+'style="text-align:center;color:var(--muted)">' +
+
+'Global leaderboard coming soon.' +
+
+'</td></tr>';
+
+
+return;
+
+}
+
+
+body.innerHTML=
+
+'<tr><td colspan="3" ' +
+
+'style="text-align:center;color:var(--muted)">' +
+
+'Loading...' +
+
+'</td></tr>';
+
+
+try{
+
+
+const runs =
+await BACKEND.fetchLeaderboard();
+
+
+body.innerHTML='';
+
+
+if(!runs.length){
+
+body.innerHTML=
+
+'<tr><td colspan="3" ' +
+
+'style="text-align:center;color:var(--muted)">' +
+
+'No speedruns published yet.' +
+
+'</td></tr>';
+
+
+return;
+
+}
+
+
+runs.forEach(
+(e,i)=>{
+
+
+const tr =
+document.createElement('tr');
+
+
+tr.innerHTML=
+
+`<td>#${i+1}</td>` +
+
+`<td>${escapeHTML(String(e.name))}</td>` +
+
+`<td>${Number(e.time).toFixed(1)}s</td>`;
+
+
+body.appendChild(tr);
+
+}
+);
+
+
+}
+
+catch(e){
+
+body.innerHTML=
+
+'<tr><td colspan="3" ' +
+
+'style="text-align:center;color:var(--muted)">' +
+
+'Unable to load leaderboard.' +
+
+'</td></tr>';
+
+}
+
+}
+
+
+async function publishSpeedrunTime(){
+
+if(!lastRunValid){
+
+alert(
+
+'This run could not be published because ' +
+
+'its timing failed validation.'
+
+);
+
+return;
+
+}
+
+
+if(!BACKEND.enabled()){
+
+alert(
+
+'The global leaderboard is not connected yet. ' +
+
+'Your Personal Best was still saved on this browser.'
+
+);
+
+return;
+
+}
+
+
+const input =
+document.getElementById(
+'player-name-input'
+);
+
+
+const name =
+(
+input.value.trim()
+||
+'Anonymous Seeker'
+)
+.slice(0,24);
+
+
+try{
+
+
+await BACKEND.submitRun({
+
+name:name,
+
+time:Number(
+timerValue.toFixed(3)
+),
+
+created_at:
+new Date().toISOString()
+
+});
+
+
+input.value='';
+
+
+showLeaderboardScreen();
+
+
+}
+
+catch(e){
+
+alert(
+
+'Your time could not be published. ' +
+
+'Please try again.'
+
+);
+
+}
+
+}
+
+
+function escapeHTML(s){
+
+const d =
+document.createElement('div');
+
+
+d.textContent=s;
+
+
+return d.innerHTML;
+
+}
+
+
+/* =====================================================
+   UNICODE-SAFE CUSTOM LEVELS
+   ===================================================== */
+
+function unicodeToBase64(text){
+
+const bytes =
+new TextEncoder()
+.encode(text);
+
+
+let binary='';
+
+
+bytes.forEach(
+b=>binary +=
+String.fromCharCode(b)
+);
+
+
+return btoa(binary);
+
+}
+
+
+function base64ToUnicode(code){
+
+const binary =
+atob(code.trim());
+
+
+return new TextDecoder()
+.decode(
+
+Uint8Array.from(
+
+binary,
+
+c=>c.charCodeAt(0)
+
+)
+
+);
+
+}
+
+
+/* Supports either:
+   ABC
+   or
+   A B C */
+
+function parseSymbols(text){
+
+const s =
+text.trim();
+
+
+return !s
+
+? []
+
+:
+
+(/\s/.test(s)
+
+? s.split(/\s+/).filter(Boolean)
+
+: Array.from(s)
+
+);
+
+}
+
+
+function gridCellCount(g){
+
+return g === '3x3'
+
+? 9
+
+: g === '4x3'
+
+? 12
+
+: 16;
+
+}
+
+
+function gridColumns(g){
+
+return g === '4x4'
+
+? 4
+
+: 3;
+
+}
+
+
+/* =====================================================
+   CUSTOM CREATOR
+   ===================================================== */
+
+function openCustomCreator(){
+
+changeScreen(
+'custom-creator'
+);
+
+
+resetCustomEditor();
+
+}
+
+
+function resetCustomEditor(){
+
+customEditorCells =
+
+Array(
+
+gridCellCount(
+
+document
+.getElementById(
+'custom-grid-size'
+)
+.value
+
+)
+
+).fill('');
+
+
+const all=[
+
+...parseSymbols(
+
+document
+.getElementById(
+'custom-targets'
+)
+.value
+
+),
+
+...parseSymbols(
+
+document
+.getElementById(
+'custom-decoys'
+)
+.value
+
+)
+
+];
+
+
+customSelectedSymbol =
+all[0] || '';
+
+
+renderCustomEditor();
+
+
+document
+.getElementById(
+'custom-code-output'
+)
+.classList
+.add('hidden');
+
+
+document
+.getElementById(
+'play-custom-button'
+)
+.classList
+.add('hidden');
+
+}
+
+
+function renderCustomEditor(){
+
+const targets =
+
+parseSymbols(
+
+document
+.getElementById(
+'custom-targets'
+)
+.value
+
+);
+
+
+const decoys =
+
+parseSymbols(
+
+document
+.getElementById(
+'custom-decoys'
+)
+.value
+
+);
+
+
+const symbols=[
+
+...new Set(
+
+[
+
+...targets,
+
+...decoys
+
+]
+
+)
+
+];
+
+
+if(
+
+symbols.length
+
+&&
+
+!symbols.includes(
+customSelectedSymbol
+)
+
+){
+
+customSelectedSymbol=
+symbols[0];
+
+}
+
+
+const p =
+document
+.getElementById(
+'custom-palette'
+);
+
+
+p.innerHTML='';
+
+
+symbols.forEach(s=>{
+
+const b =
+document.createElement('button');
+
+
+b.textContent=s;
+
+
+if(
+s === customSelectedSymbol
+){
+
+b.classList.add(
+'selected'
+);
+
+}
+
+
+b.onclick=()=>{
+
+customSelectedSymbol=s;
+
+renderCustomEditor();
+
+};
+
+
+p.appendChild(b);
+
+});
+
+
+const g =
+document
+.getElementById(
+'custom-editor-grid'
+);
+
+
+const size =
+document
+.getElementById(
+'custom-grid-size'
+)
+.value;
+
+
+g.style.gridTemplateColumns =
+`repeat(${gridColumns(size)},1fr)`;
+
+
+g.innerHTML='';
+
+
+customEditorCells.forEach(
+(s,i)=>{
+
+
+const b =
+document.createElement('button');
+
+
+b.textContent =
+s || '·';
+
+
+b.onclick=()=>{
+
+if(customSelectedSymbol){
+
+customEditorCells[i] =
+customSelectedSymbol;
+
+
+renderCustomEditor();
+
+}
+
+};
+
+
+/* Right-click clears a cell */
+
+b.oncontextmenu=e=>{
+
+e.preventDefault();
+
+
+customEditorCells[i]='';
+
+
+renderCustomEditor();
+
+};
+
+
+g.appendChild(b);
+
+}
+);
+
+}
+
+
+function clearCustomPlacement(){
+
+customEditorCells.fill('');
+
+
+renderCustomEditor();
+
+}
+
+
+function randomCustomPlacement(){
+
+const targets=
+
+parseSymbols(
+
+document
+.getElementById(
+'custom-targets'
+)
+.value
+
+);
+
+
+const decoys=
+
+parseSymbols(
+
+document
+.getElementById(
+'custom-decoys'
+)
+.value
+
+);
+
+
+const cells=
+
+gridCellCount(
+
+document
+.getElementById(
+'custom-grid-size'
+)
+.value
+
+);
+
+
+if(!targets.length){
+
+alert(
+
+'Please enter at least one target symbol first.'
+
+);
+
+return;
+
+}
+
+
+let pool=[];
+
+
+/* Three copies of each target */
+
+targets.forEach(t=>{
+
+for(
+let i=0;
+i<3;
+i++
+){
+
+pool.push(t);
+
+}
+
+});
+
+
+pool.push(
+...decoys
+);
+
+
+/* Fill remaining cells */
+
+while(
+pool.length < cells
+){
+
+pool.push(
+
+targets[
+
+Math.floor(
+Math.random()
+*
+targets.length
+)
+
+]
+
+);
+
+}
+
+
+pool =
+pool.slice(
+0,
+cells
+);
+
+
+/* Shuffle */
+
+for(
+let i=pool.length-1;
+i>0;
+i--
+){
+
+const j=
+
+Math.floor(
+
+Math.random()
+*
+(i+1)
+
+);
+
+
+[
+pool[i],
+pool[j]
+]
+
+=
+
+[
+pool[j],
+pool[i]
+];
+
+}
+
+
+customEditorCells=
+pool;
+
+
+renderCustomEditor();
+
+}
+
+
+/* =====================================================
+   SHORTER CUSTOM CODE
+
+   OLD:
+   JSON -> UTF-8 -> Base64
+
+   NEW:
+   grid + separator + targets + separator + cells
+   -> UTF-8 -> Base64
+
+   This removes all the repeated JSON property names.
+   ===================================================== */
+
+function generateCustomCode(){
+
+const g =
+
+document
+.getElementById(
+'custom-grid-size'
+)
+.value;
+
+
+const t=
+
+parseSymbols(
+
+document
+.getElementById(
+'custom-targets'
+)
+.value
+
+);
+
+
+if(!t.length){
+
+alert(
+
+'A custom level needs at least one target symbol.'
+
+);
+
+return;
+
+}
+
+
+if(
+
+customEditorCells.some(
+x=>!x
+)
+
+){
+
+alert(
+
+'Please fill every square, or use Random Placement.'
+
+);
+
+return;
+
+}
+
+
+if(
+
+!customEditorCells.some(
+x=>t.includes(x)
+)
+
+){
+
+alert(
+
+'At least one placed square must contain a target symbol.'
+
+);
+
+return;
+
+}
+
+
+customLevelData={
+
+v:1,
+
+g:g,
+
+t:t,
+
+c:customEditorCells
+
+};
+
+
+/* Unit Separator */
+
+const raw =
+
+g
+
++
+
+'\u001f'
+
++
+
+t.join('')
+
++
+
+'\u001f'
+
++
+
+customEditorCells.join('');
+
+
+const out=
+
+document
+.getElementById(
+'custom-code-output'
+);
+
+
+out.textContent=
+unicodeToBase64(raw);
+
+
+out.classList.remove(
+'hidden'
+);
+
+
+document
+.getElementById(
+'play-custom-button'
+)
+.classList
+.remove('hidden');
+
+}
+
+
+function playCreatedCustomLevel(){
+
+if(customLevelData){
+
+startCustomLevel(
+customLevelData
+);
+
+}
+
+}
+
+
+function loadCustomCode(){
+
+const err=
+
+document
+.getElementById(
+'custom-load-error'
+);
+
+
+err.textContent='';
+
+
+try{
+
+
+const raw=
+
+base64ToUnicode(
+
+document
+.getElementById(
+'custom-code-input'
+)
+.value
+
+);
+
+
+const parts=
+
+raw.split(
+'\u001f'
+);
+
+
+if(parts.length !== 3){
+
+throw Error();
+
+}
+
+
+const d={
+
+v:1,
+
+g:parts[0],
+
+t:Array.from(
+parts[1]
+),
+
+c:Array.from(
+parts[2]
+)
+
+};
+
+
+if(
+
+![
+'3x3',
+'4x3',
+'4x4'
+].includes(d.g)
+
+||
+
+!d.t.length
+
+||
+
+d.c.length
+!== gridCellCount(d.g)
+
+||
+
+d.c.some(
+x=>!x
+)
+
+||
+
+!d.c.some(
+x=>d.t.includes(x)
+)
+
+){
+
+throw Error();
+
+}
+
+
+customLevelData=d;
+
+
+startCustomLevel(d);
+
+}
+
+
+catch(e){
+
+err.textContent=
+
+'That does not appear to be a valid custom level code.';
+
+}
+
+}
+
+
+/* =====================================================
+   PLAY CUSTOM LEVEL
+   ===================================================== */
+
+function startCustomLevel(d){
+
+currentCustomLevel=d;
+
+isSpeedrun=false;
+
+currentLevel='Custom';
+
+
+changeScreen(
+'gameplay'
+);
+
+
+document
+.getElementById('stat-level')
+.textContent=
+'Custom';
+
+
+const tabs=
+
+document
+.getElementById(
+'scanner-tabs'
+);
+
+
+tabs.innerHTML='';
+
+
+d.t.forEach(
+(t,i)=>{
+
+
+const b=
+document.createElement(
+'button'
+);
+
+
+b.className=
+
+'tab ' +
+
+(
+i===0
+? 'active'
+: ''
+);
+
+
+b.textContent=
+LABELS[t] || t;
+
+
+b.onclick=()=>{
+
+
+playSound('tick');
+
+
+document
+.querySelectorAll('.tab')
+.forEach(
+x=>x.classList.remove('active')
+);
+
+
+b.classList.add(
+'active'
+);
+
+
+activeTarget=t;
+
+};
+
+
+tabs.appendChild(b);
+
+}
+);
+
+
+activeTarget=
+d.t[0];
+
+
+levelItems=
+
+d.c.map(
+char=>({
+
+char:char,
+
+isDecoy:
+!d.t.includes(char),
+
+matched:false
+
+})
+);
+
+
+totalRequiredMatches=
+
+levelItems
+.filter(
+x=>!x.isDecoy
+)
+.length;
+
+
+totalCurrentFound=0;
+
+
+document
+.getElementById(
+'stat-progress'
+)
+.textContent=
+
+`0/${totalRequiredMatches}`;
+
+
+document
+.getElementById('grid')
+.className=
+
+`game-grid grid-${d.g}`;
+
+
+/* Custom placements stay exactly
+   where the creator put them */
+
+renderGrid();
+
+
+startTimer();
+
+}
+
 </script>
+
 </body>
 </html>
