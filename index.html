@@ -65,7 +65,7 @@ body{
   gap:12px;
 }
 
-/* BOLD BUTTONS */
+/* BUTTONS */
 .btn{
   width:100%;
   padding:13px;
@@ -813,12 +813,7 @@ Main Menu
 
 
 /* =====================================================
-   SUPABASE SETTINGS
-
-   LEAVE THESE BLANK FOR NOW.
-
-   The setup instructions below explain exactly what to
-   paste here.
+   BACKEND SETTINGS
    ===================================================== */
 
 const SUPABASE_URL = "https://vmhsymrmxlmawhmwaapx.supabase.co";
@@ -1090,12 +1085,6 @@ let customLevelData = null;
 
 /* =====================================================
    BACKEND ADAPTER
-
-   THIS DOES NOT USE LOCAL STORAGE.
-
-   Personal Bests are separate and DO use localStorage.
-
-   Global leaderboard runs go only to Supabase.
    ===================================================== */
 
 const BACKEND={
@@ -1579,7 +1568,7 @@ c.targets[0];
 levelItems=[];
 
 
-/* Three of each target */
+/* Three of each symbol */
 
 c.targets.forEach(t=>{
 
@@ -1822,7 +1811,7 @@ document
 `0/${totalRequiredMatches}`;
 
 
-/* Symbols move ONLY after failure */
+/* Symbols move after failure */
 
 shuffleAndRenderGrid();
 
@@ -2089,7 +2078,7 @@ levelStartTimestamp
 1000;
 
 
-/* Basic client-side anti-cheat */
+/* client-side anti-cheat */
 
 return(
 
@@ -2196,7 +2185,7 @@ document
 );
 
 
-/* Before Supabase is configured */
+/* Before backend */
 
 if(!BACKEND.enabled()){
 
@@ -2399,7 +2388,7 @@ return d.innerHTML;
 
 
 /* =====================================================
-   UNICODE-SAFE CUSTOM LEVELS
+   CUSTOM LEVELS
    ===================================================== */
 
 function unicodeToBase64(text){
@@ -2934,8 +2923,6 @@ renderCustomEditor();
    NEW:
    grid + separator + targets + separator + cells
    -> UTF-8 -> Base64
-
-   This removes all the repeated JSON property names.
    ===================================================== */
 
 function generateCustomCode(){
